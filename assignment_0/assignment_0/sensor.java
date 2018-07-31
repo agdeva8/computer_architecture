@@ -18,7 +18,7 @@ public class sensor {
 		// This method is now used to check the class
 		sensor trySensor = new sensor();
 		trySensor.updateState();
-		trySensor.changePvalue(0.4);
+		//trySensor.changePvalue(0.4);
 		trySensor.printAttributes();
 		if(trySensor.detectMotion(0))
 			System.out.println("got caught");
