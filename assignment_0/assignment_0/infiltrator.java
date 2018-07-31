@@ -42,7 +42,8 @@ public class infiltrator {
 	
 	public int finalDecision()
 	{
-		// will return -1 if he decide not to move else 0,1,2 according to possible cell
+		// will return -1 if he decide not to move
+		// else 0:front cell; 1:frontLeft_cell; 2:frontRight_cell;
 		int[] possible_cells = findPossibleCells();
 		for(int i=0; i<3; i++)
 		{
