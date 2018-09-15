@@ -1,0 +1,5 @@
+descending.out            =		     -878251457
+evenorodd.out             =			  286481597
+fibonacci.out             =          -432822385
+palindrome.out            =           1384542853
+prime.out                 =           1746953974

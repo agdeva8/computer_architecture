@@ -1,0 +1,3 @@
+Number of cycles taken = 22
+Number of OF Stall     = 9
+Number of times an instruction on a wrong branch path entered= 1
