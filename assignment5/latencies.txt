@@ -1,0 +1,4 @@
+ALU = 			1
+Multiplier = 		4
+Divider = 		10
+Main Memory = 		40

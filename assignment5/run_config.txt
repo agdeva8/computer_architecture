@@ -1,0 +1,5 @@
+/home/deva/computer_architecture/assignment3/src/configuration/config.xml
+
+/home/deva/computer_architecture/assignment3/ass1_programs/prime.stat
+
+/home/deva/computer_architecture/assignment3/ass1_programs/prime.out
