@@ -1,0 +1,129 @@
+#!/bin/bash
+
+getStat()
+{
+	for i in 'descending' 'even-odd' 'fibonacci' 'palindrome' 'prime' 
+	do
+		echo 'for program '$i'.out'
+
+		ant -q
+		ant make-jar -q
+		ass1prog='../ass1_programs/'$i'.out'
+		echo $ass1prog
+		tempStat='temp.stat'
+		jarFile='jars/simulator.jar'
+		tempRegister='temp.register'
+
+		java -jar $jarFile $configFile $tempStat $ass1prog >> $tempRegister
+
+		touch $tempStat
+		stat=$(<$tempStat)
+		line=$i','$stat','
+		echo $line
+		echo $line >> $statFile
+		rm -f $tempStat
+		rm -rf 'jars'
+		rm -rf 'bins'
+	done
+}
+
+myProg(){
+	cd '/home/deva/computer_architecture/assignment6/supporting_files2/'
+
+	l1Config='configL.xml'
+	l1Processor='ProcessorL.java'
+	configFile='src/configuration/config.xml' 
+	processorFile='src/processor/Processor.java'
+	pythonTestFile='test_zip.py'
+	srcFile='src'
+	srcZip='src.zip'
+	tempFile='temp'
+	statFile='statistic.txt'
+
+	pwd
+
+	liCacheSize=(4 8 32 128 1000)
+	liLatency=(1 2 4 8 12)
+
+	ldCacheSize=(4 8 32 128 1000)
+	ldLatency=(1 2 4 8 12)
+
+	echo "for l1d: cache size is "${ldCacheSize[4]}" and latency is "${ldLatency[4]}
+	echo
+	
+	#echo 'l1d_cache,latency,cache size' >> $statFile
+	#echo 'l1d_cache,'$ldLatency','$ldCacheSize >> $statFile
+	#echo '' >> $statFile
+	echo 'programs,nCycles,nDynamicIns,li latency,li CacheSize,ld latency,ld cacheSize' >> $statFile
+	echo '' >> $statFile
+
+	for i in 0 1
+	do
+		rm -f $configFile
+		rm -f $processorFile
+		rm -f 'src/processor/Processor.class'
+		rm -f $srcZip
+
+		echo "cache size is "${liCacheSize[$i]}" and latency is "${liLatency[$i]};
+
+
+		sed "s/l1dLatencyDeva/${ldLatency[4]}/g" $l1Config >> $tempFile
+		sed "s/l1iLatencyDeva/${liLatency[$i]}/g" $tempFile >> $configFile
+		rm -f $tempFile
+
+		sed "s/l1dCacheSizeDeva/${ldCacheSize[4]}/g" $l1Processor >> $tempFile
+		sed "s/l1iCacheSizeDeva/${liCacheSize[$i]}/g" $tempFile >> $processorFile
+		rm -f $tempFile
+
+		zip -r -q $srcZip $srcFile
+
+		python $pythonTestFile $srcZip
+		echo "getting statistics"
+		getStat
+		echo "-------------------------------------------------------------"
+		echo
+	done
+
+	echo
+	echo "*****************************************************************"
+	echo "for l1i: cache size is "${liCacheSize[4]}" and latency is "${liLatency[4]}
+	echo
+	
+	#echo '' >> $statFile
+	#echo '' >> $statFile
+	#echo 'l1i_cache,latency,cache size' >> $statFile
+	#echo 'l1i_cache,'$liLatency','$liCacheSize >> $statFile
+	#echo '' >> $statFile
+	#echo 'programs,nCycles,nDynamicIns' >> $statFile
+	#echo '' >> $statFile
+
+	for i in 
+	do
+		rm -f $configFile
+		rm -f $processorFile
+		rm -f 'src/processor/Processor.class'
+		rm -f $srcZip
+
+		echo "cache size is "${ldCacheSize[$i]}" and latency is "${ldLatency[$i]};
+
+
+		sed "s/l1dLatencyDeva/${ldLatency[$i]}/g" $l1Config >> $tempFile
+		sed "s/l1iLatencyDeva/${liLatency[4]}/g" $tempFile >> $configFile
+		rm -f $tempFile
+
+		sed "s/l1dCacheSizeDeva/${ldCacheSize[$i]}/g" $l1Processor >> $tempFile
+		sed "s/l1iCacheSizeDeva/${liCacheSize[4]}/g" $tempFile >> $processorFile
+		rm -f $tempFile
+
+		zip -r -q $srcZip $srcFile
+
+		python $pythonTestFile $srcZip
+		echo "getting statistics"
+		getStat
+		echo "-------------------------------------------------------------"
+		echo
+		getStat
+	done
+}
+
+myProg
